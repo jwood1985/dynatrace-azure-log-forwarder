@@ -57,6 +57,11 @@ def process_logs(events: List[func.EventHubEvent], self_monitoring: SelfMonitori
         verify_dt_access_params_provided()
         logging.throttling_counter.reset_throttling_counter()
 
+        
+        # Measure the size of raw events
+        total_size = sum(len(event.get_body()) for event in events)
+        logging.info(f"Total size of raw events: {total_size} bytes")
+
         start_time = time.perf_counter()
 
         logs_to_be_sent_to_dt = extract_logs(events, self_monitoring)
